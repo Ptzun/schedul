@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Green Aliens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="shortcut icon" href="logo.png" type="image/x-icon">
+<style>
+  body { background: #f4f6f9; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+ 
+  /* --- Pure CSS Tab Logic --- */
+  .tab-content { display: none; }
+  #tab1:checked ~ .content-wrapper #content1,
+  #tab2:checked ~ .content-wrapper #content2,
+  #tab3:checked ~ .content-wrapper #content3,
+  #tab4:checked ~ .content-wrapper #content4,
+  #tab5:checked ~ .content-wrapper #content5 { display: block; }
+ 
+  .tab-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+  .tab-nav label {
+    padding: 10px 20px; background: #dee2e6; border-radius: 25px;
+    cursor: pointer; font-weight: 600; transition: 0.3s; color: #495057;
+  }
+  #tab1:checked ~ .tab-nav label[for="tab1"],
+  #tab2:checked ~ .tab-nav label[for="tab2"],
+  #tab3:checked ~ .tab-nav label[for="tab3"],
+  #tab4:checked ~ .tab-nav label[for="tab4"],
+  #tab5:checked ~ .tab-nav label[for="tab5"] {
+    background: #198754; color: white;
+  }
+ 
+  input[type="radio"] { display: none; }
+ 
+  /* --- Calendar Grid --- */
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin: 20px 0;
+  }
+  .day-name {
+    background: #e8f5e9; font-weight: bold; text-align: center;
+    padding: 10px; border-radius: 8px; border: 1px solid #dee2e6;
+    font-size: 0.9rem;
+  }
+  .date-cell {
+    background: white; border: 1px solid #dee2e6; padding: 15px 5px;
+    text-align: center; border-radius: 8px; cursor: pointer; display: block;
+    text-decoration: none; color: #212529; transition: 0.2s; font-weight: 500;
+  }
+  .date-cell:hover { background: #217b51; color: white; border-color: #198754; }
+ 
+  /* Highlighted Event Days */
+  .event { background: #d1e7dd; border: 2px solid #198754; font-weight: bold; }
+ 
+ 
+  .css-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center;
+    z-index: 2000;
+  }
+  .css-modal:target { display: flex; }
+  .modal-inner {
+    background: white; padding: 30px; border-radius: 15px;
+    max-width: 450px; width: 90%; text-align: center; position: relative;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; text-decoration: none; color: #adb5bd; }
+  .close-btn:hover { color: #000; }
+     footer {
+      background-color: #F1F8E9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .footer-title {
+      color: #1B5E20;
+    }
+
+    .footer-text {
+      color: #2E7D32;
+    }
+
+    .footer-link {
+      color: #2E7D32;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .footer-link:hover {
+      color: #1B5E20;
+      padding-left: 5px;
+    }
+
+    .dropdown-menu {
+      background-color: #C8E6C9;
+      border: none;
+    }
+
+    .dropdown-item:hover {
+      background-color: #66BB6A;
+      color: white;
+    }
+
+    .footer-logo {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 10px;
+    }
+
+    hr {
+      border-color: #C8E6C9;
+    }
+    .navbar{
+    background-color: #fff;
+    height: 80px;
+    margin: 18px;
+    border-radius: 16px;
+    padding: 0.5rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+body{
+  overflow-x: hidden;
+}
+.navbar-brand{
+    font-weight: 500;
+    color: #12d379;
+    font-size: 24px;
+
+}
+
+.login-button{
+    background-color: #12d379;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: 0.3s background-color;
+}
+.login-button:hover{
+    background-color: #59b688;
+}
+.navbar-toggler{
+    border: none;
+    font-size: 1.25rem;
+}
+.navbar-toggler:focus, .btn-close{
+    box-shadow: none;
+    outline: none;
+}
+.nav-link{
+    color: #666777;
+    font-weight: 500;
+    position: relative;
+}
+.nav-link:hover, .nav-link.active{
+    color: black;
+}
+@media(min-width: 991px){
+    .nav-link::before{
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background-color: #12d379;
+        visibility: hidden;
+        transition: 0.3s ease-in-out;
+    }
+    .nav-link:hover::before, .nav-link.active::before{
+        width: 100%;
+        visibility: visible;
+    }
+
+
+}
+   .hero-section {
+      margin-top: 120px; /* Prevent overlap with fixed navbar */
+      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      color: #155d27;
+      padding: 80px 0;
+      border-radius: 25px;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    .btn-custom {
+      background-color: #21965f;
+      border: none;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+      background-color: #0fa866;
+      transform: translateY(-2px);
+    }
+
+    .main-img {
+      width: 100%;
+      border-radius: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2rem;
+        text-align: center;
+      }
+      .text-area {
+        text-align: center;
+      }
+    }
+    @media (max-width: 768px) {
+
+  .footer-brand {
+    justify-content: center !important;
+    text-align: center;
+  }
+
+  .footer-brand h5 {
+    text-align: center;
+  }
+
+}
+@media (max-width: 768px){
+  .calendar {
+    grid-template-columns: repeat(4,  );
+  }
+
+  .date-cell {
+    padding: 10px 5px;
+    font-size: 0.85rem;
+  }
+
+  .day-name {
+    font-size: 0.75rem;
+    padding: 6px;
+  }
+}
+</style>
+</head>
+<body>
+   <nav class="navbar navbar-expand-lg  fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand me-auto d-flex" href="#">
+                    <img src="logo.png" alt="logo" style="width: 60px;">
+                    <h5 class="fw-bold mb-0 footer-title mt-3">Green Aliens</h5>
+                <a>
+                <div class="offcanvas offcanvas-end"  id="offcanvasNavbar">
+                <div class="offcanvas-header">
+                  <div class="d-flex">
+                    <img src="logo.png" alt="logo" style="width: 60px;">
+                    <h5 class="fw-bold mb-0 footer-title mt-3">Green Aliens</h5>
+                  </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                </div>
+                
+                <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link  mx-lg-2" href="index.html">Home</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2" href="AboutUs.html">About Us</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle mx-lg-2" href="#" role="button" data-bs-toggle="dropdown">
+                                    Activity
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="yoga.html">Yoga Club</a></li>
+                                    <li><a class="dropdown-item" href="activity Zumba1 2.html">Zumba Club</a></li>
+                                    <li><a class="dropdown-item" href="Meditation.html">Meditation</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle mx-lg-2" href="#" role="button" data-bs-toggle="dropdown">
+                                    Event
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="Funfair.html">Fun Fair</a></li>
+                                    <li><a class="dropdown-item" href="food court.html">Food Court</a></li>
+                                    <li><a class="dropdown-item" href="renting2 2.html">Renting</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2" href="volunteer.html">Volunteer</a>
+                            </li>
+
+                           <li class="nav-item">
+                                <a class="nav-link active mx-lg-2" href="Schedule.html">Schedule</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link  mx-lg-2" href="Login.html">Log in</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link  mx-lg-2" href="SignUp.html">Sign Up</a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2" href="ContactUs.html">Contact Us</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button class="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <div class="col-lg-6 text-area">
+        <h1>Don't just fill your time 
+  <br>fill your life</h1>
+
+        <div class="mt-4">
+          <h6 class="fw-bold">--------------</h6>
+          <p>
+            Plan your next event with us! Check availability and reserve our facilities for gatherings, workshops, or special occasions. Flexible scheduling options are available to meet your needs.
+          </p>
+          <a href="#meditation" class="btn btn-custom">Explore</a>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mt-4 mt-lg-0">
+        <img src="https://blog.zohowebstatic.com/sites/zblogs/images/shifts/shiftscheduleblog/image_in_slide_2_of_different_types_of_schedules_-_know_whats_right_for_you.jpeg"
+             class="main-img shadow"
+             alt="">
+      </div>
+
+    </div>
+  </div>
+</section>
+<div class="container py-5" id="meditation">
+  <h2 class="text-center mb-4 fw-bold">Clubs & Activities Portal</h2>
+ 
+  <input type="radio" name="club-tabs" id="tab1" checked>
+  <input type="radio" name="club-tabs" id="tab2">
+  <input type="radio" name="club-tabs" id="tab3">
+  <input type="radio" name="club-tabs" id="tab4">
+  <input type="radio" name="club-tabs" id="tab5">
+ 
+  <div class="tab-nav">
+    <label for="tab1">🤝 Volunteer</label>
+    <label for="tab2">💃 Zumba</label>
+    <label for="tab3">🧘 Meditation</label>
+    <label for="tab4">🧎 Yoga</label>
+    <label for="tab5">🏫 Renting</label>
+  </div>
+ 
+  <div class="content-wrapper shadow bg-white p-4 rounded-4">
+   
+    <div id="content1" class="tab-content">
+      <h3 class="text-center text-success mb-3">Volunteer Club</h3>
+      <div class="calendar">
+        <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+        <a href="#ev-plant" class="date-cell event">1</a><a href="#no-event" class="date-cell">2</a><a href="#no-event" class="date-cell">3</a><a href="#no-event" class="date-cell">4</a><a href="#no-event" class="date-cell">5</a><a href="#no-event" class="date-cell">6</a><a href="#ev-clean" class="date-cell event">7</a>
+        <a href="#ev-plant" class="date-cell event">8</a><a href="#no-event" class="date-cell">9</a><a href="#no-event" class="date-cell">10</a><a href="#no-event" class="date-cell">11</a><a href="#no-event" class="date-cell">12</a><a href="#no-event" class="date-cell">13</a><a href="#ev-clean" class="date-cell event">14</a>
+        <a href="#ev-plant" class="date-cell event">15</a><a href="#no-event" class="date-cell">16</a><a href="#no-event" class="date-cell">17</a><a href="#no-event" class="date-cell">18</a><a href="#no-event" class="date-cell">19</a><a href="#no-event" class="date-cell">20</a><a href="#ev-clean" class="date-cell event">21</a>
+        <a href="#ev-plant" class="date-cell event">22</a><a href="#no-event" class="date-cell">23</a><a href="#no-event" class="date-cell">24</a><a href="#no-event" class="date-cell">25</a><a href="#no-event" class="date-cell">26</a><a href="#no-event" class="date-cell">27</a><a href="#ev-clean" class="date-cell event">28</a>
+        <a href="#ev-plant" class="date-cell event">29</a><a href="#no-event" class="date-cell">30</a><a href="#no-event" class="date-cell">31</a>
+      </div>
+      <table class="table table-striped text-center align-middle border">
+        <thead class="table-success">
+          <tr><th>Day</th><th>Time</th><th>Activity</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Saturday</td><td>3:00PM - 4:30PM</td><td>Clean up</td></tr>
+          <tr><td>Sunday</td><td>3:00PM - 4:30PM</td><td>Planting Time</td></tr>
+        </tbody>
+      </table>
+    </div>
+ 
+    <div id="content2" class="tab-content">
+      <h3 class="text-center text-success mb-3">Zumba Club</h3>
+      <div class="calendar">
+        <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+        <a href="#ev-zumba" class="date-cell event">1</a><a href="#ev-zumba" class="date-cell event">2</a><a href="#ev-zumba" class="date-cell event">3</a><a href="#ev-zumba" class="date-cell event">4</a><a href="#ev-zumba" class="date-cell event">5</a><a href="#ev-zumba" class="date-cell event">6</a><a href="#ev-zumba" class="date-cell event">7</a>
+        <a href="#ev-zumba" class="date-cell event">8</a><a href="#ev-zumba" class="date-cell event">9</a><a href="#ev-zumba" class="date-cell event">10</a><a href="#ev-zumba" class="date-cell event">11</a><a href="#ev-zumba" class="date-cell event">12</a><a href="#ev-zumba" class="date-cell event">13</a><a href="#ev-zumba" class="date-cell event">14</a>
+        <a href="#ev-zumba" class="date-cell event">15</a><a href="#ev-zumba" class="date-cell event">16</a><a href="#ev-zumba" class="date-cell event">17</a><a href="#ev-zumba" class="date-cell event">18</a><a href="#ev-zumba" class="date-cell event">19</a><a href="#ev-zumba" class="date-cell event">20</a><a href="#ev-zumba" class="date-cell event">21</a>
+        <a href="#ev-zumba" class="date-cell event">22</a><a href="#ev-zumba" class="date-cell event">23</a><a href="#ev-zumba" class="date-cell event">24</a><a href="#ev-zumba" class="date-cell event">25</a><a href="#ev-zumba" class="date-cell event">26</a><a href="#ev-zumba" class="date-cell event">27</a><a href="#ev-zumba" class="date-cell event">28</a>
+        <a href="#ev-zumba" class="date-cell event">29</a><a href="#ev-zumba" class="date-cell event">30</a><a href="#ev-zumba" class="date-cell event">31</a>
+      </div>
+      <table class="table table-striped text-center border">
+        <thead class="table-success">
+          <tr><th>Day</th><th>Time</th><th>Class</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Monday</td><td>8:00–10:00 AM</td><td>Zumba Fitness</td></tr>
+      <tr><td>Tuesday</td><td>8:00–10:00 AM</td><td>Dance Cardio</td></tr>
+      <tr><td>Wednesday</td><td>8:00–10:00 AM</td><td>Zumba Gold (for seniors)</td></tr>
+      <tr><td>Thursday</td><td>8:00–10:00 AM</td><td>Zumba Toning</td></tr>
+      <tr><td>Saturday</td><td>8:00–10:00 AM</td><td>Zumba Kids</td></tr>
+      <tr><td>Sunday</td><td>8:00–10:00 AM</td><td>Plate by Zumba</td></tr>
+        </tbody>
+      </table>
+    </div>
+ 
+    <div id="content3" class="tab-content">
+      <h3 class="text-center text-success mb-3">Meditation Club</h3>
+      <div class="calendar">
+        <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+        <a href="#ev-med" class="date-cell event">1</a><a href="#ev-med" class="date-cell event">2</a><a href="#ev-med" class="date-cell event">3</a><a href="#ev-med" class="date-cell event">4</a><a href="#ev-med" class="date-cell event">5</a><a href="#ev-med" class="date-cell event">6</a><a href="#ev-med" class="date-cell event">7</a>
+        <a href="#ev-med" class="date-cell event">8</a><a href="#ev-med" class="date-cell event">9</a><a href="#ev-med" class="date-cell event">10</a><a href="#ev-med" class="date-cell event">11</a><a href="#ev-med" class="date-cell event">12</a><a href="#ev-med" class="date-cell event">13</a><a href="#ev-med" class="date-cell event">14</a>
+        <a href="#ev-med" class="date-cell event">15</a><a href="#ev-med" class="date-cell event">16</a><a href="#ev-med" class="date-cell event">17</a><a href="#ev-med" class="date-cell event">18</a><a href="#ev-med" class="date-cell event">19</a><a href="#ev-med" class="date-cell event">20</a><a href="#ev-med" class="date-cell event">21</a>
+        <a href="#ev-med" class="date-cell event">22</a><a href="#ev-med" class="date-cell event">23</a><a href="#ev-med" class="date-cell event">24</a><a href="#ev-med" class="date-cell event">25</a><a href="#ev-med" class="date-cell event">26</a><a href="#ev-med" class="date-cell event">27</a><a href="#ev-med" class="date-cell event">28</a>
+        <a href="#ev-med" class="date-cell event">29</a><a href="#ev-med" class="date-cell event">30</a><a href="#ev-med" class="date-cell event">31</a>
+      </div>
+      <table class="table table-striped text-center border">
+        <thead class="table-success">
+          <tr><th>Day</th><th>Time</th><th>Class</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Monday</td><td>7:00 – 8:30 AM</td><td>Focused Meditation</td></tr>
+      <tr><td>Tuesday</td><td>7:00 – 8:30 AM</td><td>Loving-Kindness (Metta) Meditation</td></tr>
+      <tr><td>Wednesday</td><td>7:00 – 8:30 AM</td><td>Movement Meditation</td></tr>
+      <tr><td>Thursday</td><td>7:00 - 8:30AM</td><td>Transcendental Meditation </td></tr>
+      <tr><td>Saturday</td><td>7:00 – 8:30 AM</td><td>Visualization Meditation</td></tr>
+      <tr><td>Sunday</td><td>7:00 – 8:30 AM</td><td>Guided Meditation</td></tr>
+        </tbody>
+      </table>
+    </div>
+ 
+    <div id="content4" class="tab-content">
+      <h3 class="text-center text-success mb-3">Yoga Club</h3>
+      <div class="calendar">
+        <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+        <a href="#ev-yoga" class="date-cell event">1</a><a href="#ev-yoga" class="date-cell event">2</a><a href="#ev-yoga" class="date-cell event">3</a><a href="#ev-yoga" class="date-cell event">4</a><a href="#ev-yoga" class="date-cell event">5</a><a href="#ev-yoga" class="date-cell event">6</a><a href="#ev-yoga" class="date-cell event">7</a>
+        <a href="#ev-yoga" class="date-cell event">8</a><a href="#ev-yoga" class="date-cell event">9</a><a href="#ev-yoga" class="date-cell event">10</a><a href="#ev-yoga" class="date-cell event">11</a><a href="#ev-yoga" class="date-cell event">12</a><a href="#ev-yoga" class="date-cell event">13</a><a href="#ev-yoga" class="date-cell event">14</a>
+        <a href="#ev-yoga" class="date-cell event">15</a><a href="#ev-yoga" class="date-cell event">16</a><a href="#ev-yoga" class="date-cell event">17</a><a href="#ev-yoga" class="date-cell event">18</a><a href="#ev-yoga" class="date-cell event">19</a><a href="#ev-yoga" class="date-cell event">20</a><a href="#ev-yoga" class="date-cell event">21</a>
+        <a href="#ev-yoga" class="date-cell event">22</a><a href="#ev-yoga" class="date-cell event">23</a><a href="#ev-yoga" class="date-cell event">24</a><a href="#ev-yoga" class="date-cell event">25</a><a href="#ev-yoga" class="date-cell event">26</a><a href="#ev-yoga" class="date-cell event">27</a><a href="#ev-yoga" class="date-cell event">28</a>
+        <a href="#ev-yoga" class="date-cell event">29</a><a href="#ev-yoga" class="date-cell event">30</a><a href="#ev-yoga" class="date-cell event">31</a>
+      </div>
+      <table class="table table-striped text-center border">
+       <thead class="table-success">
+          <tr><th>Day</th><th>Time</th><th>Class</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Monday</td><td>7:00 – 8:30 AM</td><td>Focused Meditation</td></tr>
+      <tr><td>Tuesday</td><td>7:00 – 8:30 AM</td><td>Loving-Kindness (Metta) Meditation</td></tr>
+      <tr><td>Wednesday</td><td>7:00 – 8:30 AM</td><td>Movement Meditation</td></tr>
+      <tr><td>Thursday</td><td>7:00 - 8:30AM</td><td>Transcendental Meditation </td></tr>
+      <tr><td>Saturday</td><td>7:00 – 8:30 AM</td><td>Visualization Meditation</td></tr>
+      <tr><td>Sunday</td><td>7:00 – 8:30 AM</td><td>Guided Meditation</td></tr>
+        </tbody>
+      </table>
+    </div>
+ 
+    <div id="content5" class="tab-content">
+      <h3 class="text-center mb-4">Facility Renting</h3>
+      <form class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" placeholder="John Doe">
+        </div>
+        <div class="col-md-6">
+           <div class="mb-3">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-12 text-center mt-4">
+          <button type="button" class="btn btn-success px-5" style="border-radius: 20px;">Check Availability</button>
+        </div>
+      </form>
+    </div>
+ 
+  </div>
+</div>
+ 
+<div id="ev-clean" class="css-modal">
+  <div class="modal-inner">
+    <a href="#" class="close-btn">&times;</a>
+    <h4 class="text-success">Clean Up Activity</h4>
+    <p>Join us on the 28th for our weekly neighborhood clean-up session. All gear provided!</p>
+    <button class="btn btn-success w-100">Come and Join</button>
+  </div>
+</div>
+ 
+<div id="ev-plant" class="css-modal">
+  <div class="modal-inner">
+    <a href="#" class="close-btn">&times;</a>
+    <h4 class="text-success">Planting Session</h4>
+    <p>Help us green the community gardens on the 29th. Bring gloves!</p>
+    <button class="btn btn-success w-100">Come and join</button>
+  </div>
+</div>
+ 
+<div id="ev-zumba" class="css-modal">
+  <div class="modal-inner">
+    <a href="#" class="close-btn">&times;</a>
+    <h4 class="text-success">Zumba Fitness</h4>
+    <p>High energy dance workout! Check the table for your specific class time today.</p>
+    <button class="btn btn-success w-100 text-white">Come and join</button>
+  </div>
+</div>
+ 
+<div id="ev-med" class="css-modal">
+  <div class="modal-inner">
+    <a href="#" class="close-btn">&times;</a>
+    <h4 class="text-success">Guided Meditation</h4>
+    <p>Find your zen. Our morning sessions help you start the day with clarity.</p>
+    <button class="btn btn-success w-100 text-white">Come and join</button>
+  </div>
+</div>
+ 
+<div id="ev-yoga" class="css-modal">
+  <div class="modal-inner">
+    <a href="#" class="close-btn">&times;</a>
+    <h4 class="text-success">Yoga Practice</h4>
+    <p>Strength and flexibility. Open to all levels. Please bring your own mat.</p>
+    <button class="btn btn-success w-100 text-white">Come and join</button>
+  </div>
+</div>
+ 
+<div id="no-event" class="css-modal">
+  <div class="modal-inner">
+    <a href="#" class="close-btn">&times;</a>
+    <h4>Date Selected</h4>
+    <p>No special club events are scheduled for this date. Regular club rules apply.</p>
+  </div>
+</div>
+<footer class="pt-5 pb-4  border-top">
+    <div class="container text-center text-md-start">
+      <div class="row">
+
+        <!-- About Section -->
+        <div class="col-md-4 col-lg-4 col-xl-3 mx-auto mb-4">
+          <div class="d-flex align-items-center mb-3 footer-brand">
+            <img src="logo.png" alt="Green Aliens Logo" class="footer-logo">
+            <h5 class="fw-bold mb-0 footer-title">Green Aliens</h5>
+          </div>
+          <p class="footer-text">
+            A hub for park activities and positive change. Join events, volunteer your time, and help transform our park into a vibrant space for everyone.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-4">
+          <h6 class="fw-bold mb-3 footer-title">Quick Links</h6>
+
+          <p><a href="index.html" class="footer-link">Home</a></p>
+          <p><a href="AboutUs.html" class="footer-link">About Us</a></p>
+
+          <!-- Activity Dropdown -->
+          <div class="dropdown mb-2">
+            <a class="dropdown-toggle footer-link" href="#" role="button" data-bs-toggle="dropdown">
+              Activity
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="yoga.html">Yoga Club</a></li>
+              <li><a class="dropdown-item" href="activity Zumba1 2.html">Zumba Club</a></li>
+              <li><a class="dropdown-item" href="Meditation.html">Meditation Club</a></li>
+            </ul>
+          </div>
+
+          <!-- Event Dropdown -->
+          <div class="dropdown mb-2">
+            <a class="dropdown-toggle footer-link" href="#" role="button" data-bs-toggle="dropdown">
+              Event
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="Funfair.html">Fun Fair</a></li>
+              <li><a class="dropdown-item" href="food court.html">Food Court</a></li>
+              <li><a class="dropdown-item" href="renting2 2.html">Renting</a></li>
+            </ul>
+          </div>
+
+          
+           <p><a href="volunteer.html" class="footer-link">Volunteer</a></p>
+          <p><a href="Schedule.html" class="footer-link">Schedule</a></p>
+           <p><a href="ICT reference list (1) (1).pdf" class="footer-link">Reference</a></p>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-4 col-lg-4 col-xl-3 mx-auto mb-4">
+          <h6 class="fw-bold mb-3 footer-title">Contact Us</h6>
+
+          <p class="footer-text">
+            <i class="bi bi-geo-alt-fill contact-icon"></i>
+            Yangon, Myanmar
+          </p>
+
+          <p class="footer-text">
+            <i class="bi bi-telephone-fill contact-icon"></i>
+            +95 9 123 456 789
+          </p>
+
+          <p class="footer-text">
+            <i class="bi bi-envelope-fill contact-icon"></i>
+            thealiens@example.com
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+      <hr class="my-4">
+
+      <!-- Copyright -->
+      <div class="text-center">
+        <small class="footer-text">
+           © 2026 Green Aliens. All Rights Reserved.
+        </small>
+      </div>
+
+    </div>
+  </footer>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+ crossorigin="anonymous"></script>
+</body>
+</html>
+ 
